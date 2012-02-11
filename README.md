@@ -38,7 +38,6 @@ Be aware of seting your right deployment target
 - MacOSX10.6.sdk
 - MacOSX10.7.sdk
 
-
 Set the permison for execution:
 
 <pre>
@@ -52,12 +51,13 @@ Then compile everything
 cd libcvd
 ./configure-10.5-32bit
 make -j3 && make install
+
 cd ../gvars3
 ./configure-10.5-32bit
 make -j3 && make install
+
 cd ../PTAM
 cp Build/OSX/* .
-vim Makefile
 make -j3
 </pre>
 
@@ -78,11 +78,12 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 4. On OSX replace ```GL/*.h``` for ```OpenGL/*.h``` on ```ofxPTAM/include/cvd/gl_helpers.h```
 
 ```c++
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+
 ```
 
 5. Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
@@ -92,9 +93,12 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #undef check
 #endif
 
+// ...
+
 ```
 
 6. Put ```ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
+
 ```c++
 #ifdef LINUX
 
@@ -110,6 +114,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 7. Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
 		
 8. Delete reference for main() 
+
 <pre>
 cd ofxPTAM/include
 rm main.cc
