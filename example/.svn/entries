@@ -1,0 +1,74 @@
+10
+
+dir
+4
+https://ampontang.googlecode.com/svn/trunk/ofxPTAM/example
+https://ampontang.googlecode.com/svn
+
+
+
+2010-04-20T08:11:40.376216Z
+4
+Akira.Hayasaka
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2f61c23f-bc8f-40f0-cb54-bb9c69ce7f6e
+
+bin
+dir
+
+build
+dir
+
+openFrameworks-Info.plist
+file
+
+
+
+
+2012-02-11T03:27:39.000000Z
+8575684a4041426cbad2264cef064e27
+2010-04-16T05:39:12.668344Z
+2
+Akira.Hayasaka
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+631
+
+src
+dir
+
+try_PTAM11_stroke.xcodeproj
+dir
+
