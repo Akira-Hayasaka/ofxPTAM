@@ -1,4 +1,4 @@
-#How to get and add the PTAM code and their dependencies libraries on Snow Leopard#
+#Compiling PTAM and needs libraries on OSX#
 
 1. Get libcvd and gvars3 libraries and compile them
 <pre>
@@ -76,15 +76,12 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
 4. On OSX replace GL/*.h for OpenGL/*.h on ofxPTAM/include/cvd/gl_helpers.h 
-<pre>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-    ↓
+```
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-
-</pre>
+```
 
 5.Add #undef check on the begining of ofxPTAM/include/TooN/TooN.h
 ```
