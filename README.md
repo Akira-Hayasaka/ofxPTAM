@@ -76,35 +76,36 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
 4. On OSX replace ```GL/*.h``` for ```OpenGL/*.h``` on ```ofxPTAM/include/cvd/gl_helpers.h```
-<pre>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
+
+```c++
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-</pre>
+```
 
 5. Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
 
-* #ifdef check
-* #undef check
-* #endif
+```c++
+#ifdef check
+#undef check
+#endif
 
-* #ifndef TOON_INCLUDE_TOON_H
-* #define TOON_INCLUDE_TOON_H
-* // ... and continue
-
+```
 
 6. Put ```ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
+```c++
+#ifdef LINUX
 
-* #ifdef LINUX
-*
-*    while(vd.pending())
-*    
-*    // ... all the code
-*    
-*    }
-*
-* #endif
+    while(vd.pending())
+    
+    // ... all the code
+    
+    }
+
+#endif
+```
 
 7. Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
 		
@@ -119,7 +120,7 @@ rm CammeraCalibration.h
 #Adding ofxPTAM addon to a oF project#
 
 1. Add the include and lib directory at the Project.xcconfig
-<pre>
+```c++
 //THE PATH TO THE ROOT OF OUR OF PATH RELATIVE TO THIS PROJECT.
 //THIS NEEDS TO BE DEFINED BEFORE CoreOF.xcconfig IS INCLUDED
 OF_PATH = ../../..
@@ -129,7 +130,7 @@ OF_PATH = ../../..
 
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_PATH)/addons/ofxPTAM/lib/osx/libcvd-0.8.dylib
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxPTAM/include
-</pre>
+```
 
 2. Add vecLib.framework
 <pre>
