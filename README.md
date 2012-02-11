@@ -75,25 +75,24 @@ cp -r /usr/local/lib/libcvd* lib/osx/
 cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
-4. On OSX replace GL/*.h for OpenGL/*.h on ofxPTAM/include/cvd/gl_helpers.h 
-```
+4. On OSX replace GL/*.h for OpenGL/*.h on ofxPTAM/include/cvd/gl_helpers.h
+<pre>
 //#include <GL/gl.h>
 //#include <GL/glu.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-```
+</pre>
 
 5.Add #undef check on the begining of ofxPTAM/include/TooN/TooN.h
-```
+<pre>
 #ifdef check
 #undef check
 #endif
 
 #ifndef TOON_INCLUDE_TOON_H
 #define TOON_INCLUDE_TOON_H
-
-// ...
-```
+// ... and continue
+</pre>
 
 6. Put ofxPTAM/include/cvd/Linux/capture_logic.cxx code between:
 ```
@@ -101,7 +100,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 
     while(vd.pending())
     
-    // ... 
+    // ... all the code
     
     }
 
