@@ -125,6 +125,7 @@ rm CammeraCalibration.h
 #Adding ofxPTAM addon to a oF project#
 
 1. Add the include and lib directory at the Project.xcconfig
+
 ```c++
 //THE PATH TO THE ROOT OF OUR OF PATH RELATIVE TO THIS PROJECT.
 //THIS NEEDS TO BE DEFINED BEFORE CoreOF.xcconfig IS INCLUDED
@@ -138,6 +139,7 @@ HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxPTAM/include
 ```
 
 2. Add vecLib.framework
+
 <pre>
 http://meandmark.com/blog/2011/03/xcode-4-adding-a-framework-to-your-project/
 </pre>
