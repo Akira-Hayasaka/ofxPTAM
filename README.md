@@ -84,28 +84,27 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
 5. Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
-```
-#ifdef check
-#undef check
-#endif
 
-#ifndef TOON_INCLUDE_TOON_H
-#define TOON_INCLUDE_TOON_H
-// ... and continue
-```
+* #ifdef check
+* #undef check
+* #endif
 
-6. ```Put ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
-<pre>
-#ifdef LINUX
+* #ifndef TOON_INCLUDE_TOON_H
+* #define TOON_INCLUDE_TOON_H
+* // ... and continue
 
-    while(vd.pending())
-    
-    // ... all the code
-    
-    }
 
-#endif
-</pre>
+6. Put ```ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
+
+* #ifdef LINUX
+*
+*    while(vd.pending())
+*    
+*    // ... all the code
+*    
+*    }
+*
+* #endif
 
 7. Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
 		
