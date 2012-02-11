@@ -83,8 +83,8 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #include <OpenGL/glu.h>
 </pre>
 
-5.Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
-<pre>
+5. Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
+```
 #ifdef check
 #undef check
 #endif
@@ -92,7 +92,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #ifndef TOON_INCLUDE_TOON_H
 #define TOON_INCLUDE_TOON_H
 // ... and continue
-</pre>
+```
 
 6. ```Put ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
 <pre>
@@ -107,7 +107,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #endif
 </pre>
 
-7. Replace all Point type calls for BPoint on ofxPTAM/include/Bundle.h and ofxPTAM/include/Bundle.cc
+7. Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
 		
 8. Delete reference for main() 
 <pre>
