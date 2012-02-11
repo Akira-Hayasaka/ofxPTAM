@@ -66,16 +66,16 @@ make -j3
 6. Move PTAM sources to ofxPTAM/include
 
 5. Move the libraries and it sources
-```
+<pre>
 cd ofxPTAM
 cp -r /usr/local/include/libcvd include/
 cp -r /usr/local/include/gvars3 include/
 cp -r /usr/local/lib/libcvd* lib/osx/
 cp -r /usr/local/lib/libGVars3* lib/osx/
-```
+</pre>
 
 6. On OSX replace GL/*.h for OpenGL/*.h on ofxPTAM/include/cvd/gl_helpers.h 
-```
+<pre>
 ...
 
 #include <GL/gl.h>
@@ -85,7 +85,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #include <OpenGL/glu.h>
 
 ...
-```
+</pre>
 
 7.Add #undef check on the begining of ofxPTAM/include/TooN/TooN.h
 ```
@@ -95,7 +95,8 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 
 #ifndef TOON_INCLUDE_TOON_H
 #define TOON_INCLUDE_TOON_H
-...
+
+// bla bla
 
 ```
 
@@ -122,7 +123,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 
 *Adding ofxPTAM addon to a oF project*
 1. Add the include and lib directory at the Project.xcconfig
-```
+<pre>
 //THE PATH TO THE ROOT OF OUR OF PATH RELATIVE TO THIS PROJECT.
 //THIS NEEDS TO BE DEFINED BEFORE CoreOF.xcconfig IS INCLUDED
 OF_PATH = ../../..
@@ -132,7 +133,8 @@ OF_PATH = ../../..
 
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_PATH)/addons/ofxPTAM/lib/osx/libcvd-0.8.dylib
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxPTAM/include
-```
+</pre>
+
 2. Add vecLib.framework
 http://meandmark.com/blog/2011/03/xcode-4-adding-a-framework-to-your-project/
 
