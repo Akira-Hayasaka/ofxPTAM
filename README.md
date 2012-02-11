@@ -62,11 +62,12 @@ make -j3
 </pre>
 
 #Prepare everything for seting your addon#
-1. Calibrate the camera
+- Print the calibration pattern, run the CameraCalibrator on PTAM directory. Take some sanpshoots, optimize and save. That will make a ```camera.cfg```
 
-2. Move PTAM sources to ofxPTAM/include
+- Move PTAM files inside ofxPTAM/include
 
-3. Move the libraries and it sources
+- Move the libraries and it sources
+
 <pre>
 cd ofxPTAM
 cp -r /usr/local/include/libcvd include/
@@ -75,7 +76,7 @@ cp -r /usr/local/lib/libcvd* lib/osx/
 cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
-4. On OSX replace ```GL/*.h``` for ```OpenGL/*.h``` on ```ofxPTAM/include/cvd/gl_helpers.h```
+- On OSX replace ```GL/*.h``` for ```OpenGL/*.h``` on ```ofxPTAM/include/cvd/gl_helpers.h```
 
 ```c++
 //#include <GL/gl.h>
@@ -86,7 +87,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 
 ```
 
-5. Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
+- Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
 
 ```c++
 #ifdef check
@@ -97,7 +98,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 
 ```
 
-6. Put ```ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
+- Put ```ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
 
 ```c++
 #ifdef LINUX
@@ -111,9 +112,9 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #endif
 ```
 
-7. Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
+- Replace all Point type calls for BPoint on ```ofxPTAM/include/Bundle.h``` and ```ofxPTAM/include/Bundle.cc```
 		
-8. Delete reference for main() 
+- Delete reference for main() 
 
 <pre>
 cd ofxPTAM/include
@@ -124,7 +125,7 @@ rm CammeraCalibration.h
 
 #Adding ofxPTAM addon to a oF project#
 
-1. Add the include and lib directory at the Project.xcconfig
+- Add the include and lib directory at the Project.xcconfig
 
 ```c++
 //THE PATH TO THE ROOT OF OUR OF PATH RELATIVE TO THIS PROJECT.
@@ -138,10 +139,10 @@ OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_PATH)/addons/ofxPTAM/lib/osx/libcvd-0.8.dyl
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxPTAM/include
 ```
 
-2. Add vecLib.framework
+- Add vecLib.framework
 
 <pre>
 http://meandmark.com/blog/2011/03/xcode-4-adding-a-framework-to-your-project/
 </pre>
 
-3. Copy ```ofxPTAM/include/camera.cfg``` to ```bin/data``` directory 
+- Copy ```ofxPTAM/include/camera.cfg``` to ```bin/data``` directory 
