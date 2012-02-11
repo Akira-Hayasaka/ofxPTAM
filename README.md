@@ -1,10 +1,10 @@
 *How to get and add the PTAM code and their dependencies libraries on Snow Leopard* 
 
 1. Get libcvd and gvars3 libraries and compile them
-```
+<pre>
 cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co libcvd
 cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co gvars3
-```
+</pre>
 
 2. Get PTAM libraries from http://www.robots.ox.ac.uk/~gk/PTAM/
 
@@ -39,15 +39,16 @@ Be aware of seting your right deployment target
 - MacOSX10.7.sdk
 
 
-Set the permison for execution: 
-```
+Set the permison for execution:
+
+<pre>
 chmod +x configure-10.5-32bit
-```
+</pre>
 
 Copy this bash file on libcvd, gvars3 and PTAM directory.
 
 Then compile everything
-```
+<pre>
 cd libcvd
 ./configure-10.5-32bit
 make -j3 && make install
@@ -58,7 +59,7 @@ cd ../PTAM
 cp Build/OSX/* .
 vim Makefile
 make -j3
-```
+</pre>
 
 4. Calibrate the camera
 
