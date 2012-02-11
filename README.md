@@ -10,7 +10,7 @@ cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co gvars3
 
 3. Configure and compile all.
 
-With your faborite editor make a bash scrip call configure-10.5-32bit that should now look like this:
+With your faborite editor make a bash scrip call ```configure-10.5-32bit``` that should now look like this:
 
 ```
 #!/bin/bash
@@ -75,7 +75,7 @@ cp -r /usr/local/lib/libcvd* lib/osx/
 cp -r /usr/local/lib/libGVars3* lib/osx/
 </pre>
 
-4. On OSX replace GL/*.h for OpenGL/*.h on ofxPTAM/include/cvd/gl_helpers.h
+4. On OSX replace ```GL/*.h``` for ```OpenGL/*.h``` on ```ofxPTAM/include/cvd/gl_helpers.h```
 <pre>
 //#include <GL/gl.h>
 //#include <GL/glu.h>
@@ -83,7 +83,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 #include <OpenGL/glu.h>
 </pre>
 
-5.Add #undef check on the begining of ofxPTAM/include/TooN/TooN.h
+5.Add #undef check on the begining of ```ofxPTAM/include/TooN/TooN.h```
 <pre>
 #ifdef check
 #undef check
@@ -94,8 +94,8 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
 // ... and continue
 </pre>
 
-6. Put ofxPTAM/include/cvd/Linux/capture_logic.cxx code between:
-```
+6. ```Put ofxPTAM/include/cvd/Linux/capture_logic.cxx``` code between:
+<pre>
 #ifdef LINUX
 
     while(vd.pending())
@@ -105,7 +105,7 @@ cp -r /usr/local/lib/libGVars3* lib/osx/
     }
 
 #endif
-```
+</pre>
 
 7. Replace all Point type calls for BPoint on ofxPTAM/include/Bundle.h and ofxPTAM/include/Bundle.cc
 		
@@ -137,4 +137,4 @@ HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxPTAM/include
 http://meandmark.com/blog/2011/03/xcode-4-adding-a-framework-to-your-project/
 </pre>
 
-3. Copy ofxPTAM/include/camera.cfg to bin/data directory 
+3. Copy ```ofxPTAM/include/camera.cfg``` to ```bin/data``` directory 
