@@ -11,6 +11,3 @@ obj/
 bin/
 build/
 !data/
-include/
-lib/osx/
-include/.DS_Store
