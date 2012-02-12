@@ -10,4 +10,11 @@ xcuserdata
 obj/
 bin/
 build/
+include/*.cc
+include/*.h
+include/*.r
+include/TooN
+include/cvd
+include/gvars3
+include/README.txt
 !data/
