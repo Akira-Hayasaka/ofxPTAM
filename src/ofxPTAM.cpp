@@ -20,13 +20,13 @@
 using namespace CVD;
 using namespace GVars3;
 
-void ofxPTAM::initPTAM(int imgW, int imgH) {
+void ofxPTAM::init(int imgW, int imgH) {
 
 	imgWidth = imgW;
 	imgHeight = imgH;	
 		
 	mimFrameBW.resize(ImageRef(imgWidth,imgHeight));
-	mimFrameRGB.resize(ImageRef(imgWidth,imgHeight));	
+	//mimFrameRGB.resize(ImageRef(imgWidth,imgHeight));	
 
 	GV3::get<Vector<NUMTRACKERCAMPARAMETERS> >("Camera.Parameters", ATANCamera::mvDefaultParams, HIDDEN);
 	mpCamera = new ofxATANCamera("Camera");
@@ -47,83 +47,96 @@ void ofxPTAM::initPTAM(int imgW, int imgH) {
 
 }
 
-void ofxPTAM::updatePTAM(unsigned char *pixels) {
-	
-	#ifdef USE_PTAM_VIDEOSRC
-		mVideoSource.GetAndFillFrameBWandRGB(mimFrameBW, mimFrameRGB);  
-	#else
-		ImageRef mirSize = ImageRef(imgWidth,imgHeight);
-		BasicImage<CVD::byte> imCaptured(pixels, mirSize);
-		mimFrameBW.resize(mirSize);
-		for (int y=0; y<mirSize.y; y++) {
-			for (int x=0; x<mirSize.x; x++) {
-				pixels++;
-				mimFrameBW[y][x]        = *pixels;
-				pixels++;
-				pixels++;
-			}
-		}
-	#endif
+void ofxPTAM::update(ofPixelsRef _pixelsRef){
+    int nChannels = _pixelsRef.getNumChannels();
+    unsigned char * pixels = _pixelsRef.getPixels();
+
+    ImageRef mirSize = ImageRef(imgWidth,imgHeight);
+    BasicImage<CVD::byte> imCaptured(pixels, mirSize);
+    mimFrameBW.resize(mirSize);
+    
+    if (nChannels == 1){
+        for (int y=0; y<mirSize.y; y++) {
+            for (int x=0; x<mirSize.x; x++) {
+                mimFrameBW[y][x]        = *pixels;
+                pixels++;
+            }
+        }
+    } else if (nChannels > 1){
+        for (int y=0; y<mirSize.y; y++) {
+            for (int x=0; x<mirSize.x; x++) {
+                pixels++;
+                mimFrameBW[y][x]        = *pixels;
+                pixels++;
+                pixels++;
+            }
+        }
+    } else if (nChannels == 4){
+        for (int y=0; y<mirSize.y; y++) {
+            for (int x=0; x<mirSize.x; x++) {
+                pixels++;
+                mimFrameBW[y][x]        = *pixels;
+                pixels++;
+                pixels++;
+                pixels++;
+            }
+        }
+    }
+
 	mpTracker->TrackFrame(mimFrameBW, false);
-	bMapBuildComplete = mpMap->IsGood();	
+	bMapBuildComplete = mpMap->IsGood();
 }
 
-#ifdef USE_PTAM_VIDEOSRC
-void ofxPTAM::drawImg() {
-	ofImage img;
-	img.setFromPixels(reinterpret_cast<unsigned char*>(mimFrameRGB.data()), imgWidth, imgHeight, OF_IMAGE_COLOR);
-	img.draw(0,0);
-}
-#endif
-
-void ofxPTAM::drawTrail() {
-	mpTracker->drawTrail();
-}
-
-void ofxPTAM::drawGrid() {
+void ofxPTAM::draw() {
     if (bMapBuildComplete)
         mpTracker->drawGrid();
+    else
+        mpTracker->drawTrail();
+}
+
+void ofxPTAM::resetMap() {
+	mpTracker->reset();
+}
+void ofxPTAM::startBuildMap() {
+	mpTracker->buildMapBegin();
 }
 
 ofMatrix4x4 ofxPTAM::getRotationMatrix() const {
-    SE3<> se3CfromW = mpTracker->GetCurrentPose();
-	ofMatrix4x4 matrix;
+    SE3<> cvdMapMatrix = mpTracker->GetCurrentPose();
+    Matrix<4> cvdCamMatrix = mpCamera->MakeUFBLinearFrustumMatrix(0.005, 100);
     
-    /*
-    matrix.set(se3CfromW.get_rotation().get_matrix()[0][0], 
-               se3CfromW.get_rotation().get_matrix()[0][1],
-               se3CfromW.get_rotation().get_matrix()[0][2], 
-               0, 
-               se3CfromW.get_rotation().get_matrix()[1][0], 
-               se3CfromW.get_rotation().get_matrix()[1][1], 
-               se3CfromW.get_rotation().get_matrix()[1][2], 
-               0, 
-               se3CfromW.get_rotation().get_matrix()[2][0], 
-               se3CfromW.get_rotation().get_matrix()[2][1],
-               se3CfromW.get_rotation().get_matrix()[2][3], 
-               0, 
-               0, 0, 0, 1);
-     */
-    /*
-    matrix.translate(se3CfromW.get_translation()[0] * PTAM_SCALE, 
-                     se3CfromW.get_translation()[1] * PTAM_SCALE, 
-                     se3CfromW.get_translation()[2] * PTAM_SCALE);
-    */
+	ofMatrix4x4 ofMapMatrix;
+    ofMatrix4x4 ofCamMatrix;
     
-    matrix.set(se3CfromW.get_rotation().get_matrix()[0][0], se3CfromW.get_rotation().get_matrix()[1][0], se3CfromW.get_rotation().get_matrix()[2][0], 0, 
-               se3CfromW.get_rotation().get_matrix()[0][1], se3CfromW.get_rotation().get_matrix()[1][1], se3CfromW.get_rotation().get_matrix()[2][1], 0, 
-               se3CfromW.get_rotation().get_matrix()[0][2], se3CfromW.get_rotation().get_matrix()[1][2],se3CfromW.get_rotation().get_matrix()[2][3], 0, 
-               0, 0, 0, 1);
-    /*
-    matrix.translate(se3CfromW.get_translation()[0], 
-                     se3CfromW.get_translation()[1], 
-                     se3CfromW.get_translation()[2]);
+    ofMapMatrix.set(cvdMapMatrix.get_rotation().get_matrix()[0][0], 
+                    cvdMapMatrix.get_rotation().get_matrix()[0][1],
+                    cvdMapMatrix.get_rotation().get_matrix()[0][2], 
+                    0, 
+                    cvdMapMatrix.get_rotation().get_matrix()[1][0], 
+                    cvdMapMatrix.get_rotation().get_matrix()[1][1], 
+                    cvdMapMatrix.get_rotation().get_matrix()[1][2], 
+                    0, 
+                    cvdMapMatrix.get_rotation().get_matrix()[2][0], 
+                    cvdMapMatrix.get_rotation().get_matrix()[2][1],
+                    cvdMapMatrix.get_rotation().get_matrix()[2][3], 
+                    0, 
+                    0, 0, 0, 1);
     
-    matrix.scale(PTAM_SCALE, PTAM_SCALE, PTAM_SCALE);
-    */
-    return matrix;
+    //ofMapMatrix.translate(cvdMapMatrix.get_translation()[0], cvdMapMatrix.get_translation()[1], cvdMapMatrix.get_translation()[2]);
+    
+    ofCamMatrix.set(cvdCamMatrix[0][0], cvdCamMatrix[0][1], cvdCamMatrix[0][2], cvdCamMatrix[0][3],
+                    cvdCamMatrix[1][0], cvdCamMatrix[1][1], cvdCamMatrix[1][2], cvdCamMatrix[1][3],
+                    cvdCamMatrix[2][0], cvdCamMatrix[2][1], cvdCamMatrix[2][2], cvdCamMatrix[2][3],
+                    cvdCamMatrix[3][0], cvdCamMatrix[3][1], cvdCamMatrix[3][2], cvdCamMatrix[3][3]);   
+                    
+    //ofMapMatrix.postMult(ofCamMatrix);
+    
+    ofMapMatrix = ofCamMatrix * ofMapMatrix;
+    
+    return ofMapMatrix;
 }
 
+/*
 void ofxPTAM::beginAR() {
 	glPushMatrix();
 	
@@ -143,15 +156,6 @@ void ofxPTAM::beginAR() {
 	sCaption = mpTracker->GetMessageForUser();
 	ofSetWindowTitle(sCaption);
 
-	// test
-	GLdouble glm[16];
-	glm[0] = se3CfromW.get_rotation().get_matrix()[0][0]; glm[1] = se3CfromW.get_rotation().get_matrix()[1][0]; glm[2] = se3CfromW.get_rotation().get_matrix()[2][0]; glm[3] = 0;
-	glm[4] = se3CfromW.get_rotation().get_matrix()[0][1]; glm[5] = se3CfromW.get_rotation().get_matrix()[1][1]; glm[6] = se3CfromW.get_rotation().get_matrix()[2][1]; glm[7] = 0;
-	glm[8] = se3CfromW.get_rotation().get_matrix()[0][2]; glm[9] = se3CfromW.get_rotation().get_matrix()[1][2]; glm[10] = se3CfromW.get_rotation().get_matrix()[2][2]; glm[11] = 0;
-	glm[12] = 0; glm[13] = 0; glm[14] = 0; glm[15] = 1;	
-	//cout << glm << endl;
-	//cout << se3CfromW.get_translation() << endl;
-	//cout << mpCamera->MakeUFBLinearFrustumMatrix(0.005, 100) << endl;
 }
 void ofxPTAM::endAR() {
 	glMatrixMode(GL_MODELVIEW);
@@ -185,14 +189,6 @@ screenCoord* ofxPTAM::getRndmTargetsPos() {
 	return sc;
 }
 
-void ofxPTAM::resetMap() {
-	mpTracker->reset();
-}
-void ofxPTAM::startBuildMap() {
-	mpTracker->buildMapBegin();
-}
-
-
 double ofxPTAM::mapScrnX(double val) {
 
 	double outVal = ((val - (0)) / (imgWidth - 0) * (1.0 - (-1.0)) + (-1.0));
@@ -207,5 +203,5 @@ double ofxPTAM::mapScrnY(double val) {
 	return -outVal;
 	
 }
-
+*/
 

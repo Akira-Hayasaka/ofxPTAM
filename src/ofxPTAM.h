@@ -9,7 +9,6 @@
 
 #pragma once
 
-//#define USE_PTAM_VIDEOSRC
 #define PTAM_SCALE 0.001
 
 #ifdef USE_PTAM_VIDEOSRC
@@ -35,47 +34,47 @@ public:
     int	   level;
 };
 
-class ofxPTAM {		
+class ofxPTAM {
 public:
-    void								initPTAM(int imgW, int imgH);
-    void								updatePTAM(unsigned char *pixels = 0);
+    void    init(int imgW, int imgH);
+    void    update(ofPixelsRef _pixelsRef);
+    void	draw();
+    
+    void	startBuildMap();	
+    void	resetMap();
+    bool    isMapBuild() const { return bMapBuildComplete; };
 		
-    #ifdef USE_PTAM_VIDEOSRC
-    void								drawImg();		
-    #endif
-    void								drawTrail();
-    void                                drawGrid();
-		
-    void								beginAR();
-    void								endAR();		
+    // TODOS
+    //  - use the ofxFaceTracking intarfaces 
+    ofVec2f     getPosition() const;
+	float       getScale() const;
+	ofVec3f     getOrientation() const;
+	ofMatrix4x4 getRotationMatrix() const;
+    
+    /*
+    // Let´s keep the things clean for the moment
+    void	beginAR();
+    void	endAR();		
 
-    screenCoord*						getCurrentCamPos(int zDepth);
-    screenCoord*						getRndmTargetsPos();
-    ofMatrix4x4                         getRotationMatrix() const;
-	
-    void								startBuildMap();	
-    void								resetMap();
-
-    bool								bMapBuildComplete;	
-		
-    double								mapScrnX(double val);
-    double								mapScrnY(double val);
+    screenCoord*	getCurrentCamPos(int zDepth);
+    screenCoord*	getRndmTargetsPos();
+        
+    double			mapScrnX(double val);
+    double			mapScrnY(double val);*/
     
 private:
+    //CVD::Image<CVD::Rgb<CVD::byte> >	mimFrameRGB;    // No usfull for the moment
+    CVD::Image<CVD::byte>   mimFrameBW;
+	
+    Map                 *mpMap; 
+    MapMaker            *mpMapMaker; 
+    ofxTracker          *mpTracker; 
+    ofxATANCamera       *mpCamera;
+	
+    int					imgWidth;
+    int					imgHeight;
     
-#ifdef USE_PTAM_VIDEOSRC
-    VideoSource							mVideoSource;
-#endif
-    CVD::Image<CVD::Rgb<CVD::byte> >	mimFrameRGB;
-    CVD::Image<CVD::byte>				mimFrameBW;
-	
-    Map									*mpMap; 
-    MapMaker							*mpMapMaker; 
-    ofxTracker							*mpTracker; 
-    ofxATANCamera						*mpCamera;
-	
-    int									imgWidth;
-    int									imgHeight;
+    bool				bMapBuildComplete;
 };		
 		
 
