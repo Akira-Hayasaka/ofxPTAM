@@ -1,8 +1,14 @@
-#Compiling PTAM and needs libraries on OSX#
+#ofxPTAM#
+This was addon started by @Akira_At_Asia and continue by @patriciogv
 
-1. Get libcvd and gvars3 libraries and compile them
+You will find that you have to make and copy all the PTAM requierd libraries and soureces. Following you will find here an explanation on how to doit on Snow Leopard and Lion OSX.
+
+##Compiling PTAM and needs libraries on MACOSX 10.6 and 10.7##
+
+1. Get TooN, libcvd and gvars3 libraries. Compile and install them.
 <pre>
-cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co libcvd
+cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/toon co TooN
+git clone git://git.savannah.nongnu.org/libcvd.git
 cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co gvars3
 </pre>
 
@@ -10,63 +16,63 @@ cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co gvars3
 
 3. Configure and compile all.
 
-With your faborite editor make a bash scrip call ```configure-10.5-32bit``` that should now look like this:
-
-```
-#!/bin/bash
-
-SDK="-isysroot /Developer/SDKs/MacOSX10.6.sdk"
-SDKLIB="-Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk"
-export MACOSX_DEPLOYMENT_TARGET="10.5"
-
-ARCH="-arch i386"
-
-export CFLAGS="$ARCH $SDK -mmacosx-version-min=10.5 -m32 -D_OSX"
-export CXXFLAGS="$ARCH $SDK -mmacosx-version-min=10.5 -m32 -D_OSX"
-export CPPFLAGS="$ARCH $SDK -mmacosx-version-min=10.5 -m32 -D_OSX"
-export LDFLAGS="$ARCH $SDKLIB -mmacosx-version-min=10.5 -m32"
-
-CC="/usr/bin/gcc-4.2"
-CXX="/usr/bin/g++-4.2"
-OBJC="/usr/bin/gcc-4.2"
-
-./configure $1 $2 $3 $4 $5 $6 $7 $8 $9
-```
-
-Be aware of seting your right deployment target
-- MacOSX10.5.sdk
-- MacOSX10.6.sdk
-- MacOSX10.7.sdk
-
-Set the permison for execution:
+    - On your libcvd directory you will find a script call ```configure_osx_32bit``` . Copy it on gvars3 directory
 
 <pre>
-chmod +x configure-10.5-32bit
+cd libcvd
+cp configure_osx_32bit ../gvars3
 </pre>
 
-Copy this bash file on libcvd, gvars3 and PTAM directory.
+    - Install TooN
 
-Then compile everything
+<pre>
+cd ../TooN
+./configure
+sudo make install
+</pre>
+
+    - Open ```libcvd/progs/video_play_source.cc``` with an editor. In line 173 change ```GL_TEXTURE_RECTANGLE_NV``` for  ```texTarget``` . It should look like this:
+
+```c++
+        // ... bla bla
+        new_frame=1;
+        glTexImage2D(*frame, 0, texTarget);
+    }
+    // ... bla bla
+```
+
+    - Open ```PTAM/Build/OSX/Makefile``` with an editor and change you ```COMPILEFLAGS``` an ```LINKFLAGS``` to look like this ones:
+<pre>
+COMPILEFLAGS = -arch i386 -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -L /usr/local/include -m32 -D_OSX -D_REENTRANT                                                  
+LINKFLAGS = -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -L /usr/local/lib -m32 -framework OpenGL -framework VecLib -lGVars3 -lcvd
+</pre>
+
+    - Configure and libcvd, gvars3 and PTAM directory.
+
 <pre>
 cd libcvd
 ./configure-10.5-32bit
-make -j3 && make install
+make -j3 
+sudo make install
 
 cd ../gvars3
 ./configure-10.5-32bit
-make -j3 && make install
+make -j3
+sudo make install
 
 cd ../PTAM
 cp Build/OSX/* .
 make -j3
 </pre>
 
-#Prepare everything for seting your addon#
+
+##Prepare everything for seting your addon##
+
 - Print the calibration pattern, run the CameraCalibrator on PTAM directory. Take some sanpshoots, optimize and save. That will make a ```camera.cfg```
 
-- Move PTAM files inside ofxPTAM/include
+- Move PTAM directory inside ofxPTAM addon and rename it ```include```. So at the end every PTAM source could be found at ```ofxPTAM/include/```
 
-- Move the libraries and it sources
+- Copy need headers into ```include``` directory and replace your compiled libraries.
 
 <pre>
 cd ofxPTAM
@@ -123,7 +129,7 @@ rm CammeraCalibration.h
 rm CammeraCalibration.h
 </pre>
 
-#Adding ofxPTAM addon to a oF project#
+##Adding ofxPTAM addon to a oF project##
 
 - Add the include and lib directory at the Project.xcconfig
 

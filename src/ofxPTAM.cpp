@@ -48,6 +48,9 @@ void ofxPTAM::init(int imgW, int imgH) {
 }
 
 void ofxPTAM::update(ofPixelsRef _pixelsRef){
+    // TODOs
+    //    - some checks here in order to avoid SEGMENTATION_FALT
+    
     int nChannels = _pixelsRef.getNumChannels();
     unsigned char * pixels = _pixelsRef.getPixels();
 
