@@ -1,69 +1,5 @@
 #ofxPTAM#
-You will find that you have to make and copy all the PTAM requierd libraries and soureces. Following you will find here an explanation on how to doit on Snow Leopard and Lion OSX.
-
-##Compiling PTAM and needs libraries on MACOSX 10.6 and 10.7##
-
-1. Get TooN, libcvd and gvars3 libraries. Compile and install them.
-<pre>
-cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/toon co TooN
-git clone git://git.savannah.nongnu.org/libcvd.git
-cvs -z3 -d:pserver:anoncvs@cvs.savannah.nongnu.org:/cvsroot/libcvd co gvars3
-</pre>
-
-2. Get PTAM libraries from http://www.robots.ox.ac.uk/~gk/PTAM/
-
-3. Configure and compile all.
-
-On your libcvd directory you will find a script call ```configure_osx_32bit``` . Copy it on gvars3 directory
-
-<pre>
-cd libcvd
-cp configure_osx_32bit ../gvars3
-</pre>
-
-Install TooN by:
-
-<pre>
-cd ../TooN
-./configure
-sudo make install
-</pre>
-
-Open ```libcvd/progs/video_play_source.cc``` with an editor. In line 173 change ```GL_TEXTURE_RECTANGLE_NV``` for  ```texTarget``` . It should look like this:
-
-```c++
-        // ... bla bla
-        new_frame=1;
-        glTexImage2D(*frame, 0, texTarget);
-    }
-    // ... bla bla
-```
-
-Open ```PTAM/Build/OSX/Makefile``` with an editor and change you ```COMPILEFLAGS``` an ```LINKFLAGS``` to look like this ones:
-
-<pre>
-COMPILEFLAGS = -arch i386 -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -L /usr/local/include -m32 -D_OSX -D_REENTRANT                                                  
-LINKFLAGS = -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -L /usr/local/lib -m32 -framework OpenGL -framework VecLib -lGVars3 -lcvd
-</pre>
-
-Configure and libcvd, gvars3 and PTAM directory.
-
-<pre>
-cd libcvd
-./configure-10.5-32bit
-make -j3 
-sudo make install
-
-cd ../gvars3
-./configure-10.5-32bit
-make -j3
-sudo make install
-
-cd ../PTAM
-cp Build/OSX/* .
-make -j3
-</pre>
-
+You will find that you have to make and copy all the PTAM requierd libraries and soureces. You can fing a detailed tutorail of how to do it on MacOSX 10.6 and 10.7 at: http://www.patriciogonzalezvivo.com/blog/?p=547
 
 ##Prepare everything for seting your addon##
 
@@ -75,7 +11,7 @@ make -j3
 
 <pre>
 cd ofxPTAM
-cp -r /usr/local/include/libcvd include/
+cp -r /usr/local/include/cvd include/
 cp -r /usr/local/include/gvars3 include/
 cp -r /usr/local/lib/libcvd* lib/osx/
 cp -r /usr/local/lib/libGVars3* lib/osx/
