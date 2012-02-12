@@ -9,6 +9,7 @@
 
 #pragma once
 
+//#define USE_PTAM_VIDEOSRC
 #define PTAM_SCALE 0.001
 
 #ifdef USE_PTAM_VIDEOSRC
@@ -19,62 +20,68 @@
 #include "cvd/byte.h"
 #include <vector>
 
-#include "ofMain.h"
 
 class ofxATANCamera;
 class Map;
 class MapMaker;
 class ofxTracker;
 
+
+// we cannot import ofMain.h because of TooN's operator override error.
+// so cannot use core OF.
+// if anyone know workarround, please tell me.
+
 struct screenCoord {
-public:
-    double x;
-    double y;
-    double z;
-    int	   level;
+	public:
+		double x;
+		double y;
+		double z;
+		int	   level;
 };
 
 class ofxPTAM {
-public:
-    void    init(int imgW, int imgH);
-    void    update(ofPixelsRef _pixelsRef);
-    void	draw();
-    
-    void	startBuildMap();	
-    void	resetMap();
-    bool    isMapBuild() const { return bMapBuildComplete; };
+	
+	private:
 		
-    // TODOS
-    //  - use the ofxFaceTracking intarfaces 
-    ofVec2f     getPosition() const;
-	float       getScale() const;
-	ofVec3f     getOrientation() const;
-	ofMatrix4x4 getRotationMatrix() const;
-    
-    /*
-    // Let´s keep the things clean for the moment
-    void	beginAR();
-    void	endAR();		
+		#ifdef USE_PTAM_VIDEOSRC
+		VideoSource							mVideoSource;
+		#endif
+		CVD::Image<CVD::Rgb<CVD::byte> >	mimFrameRGB;
+		CVD::Image<CVD::byte>				mimFrameBW;
+	
+		Map									*mpMap; 
+		MapMaker							*mpMapMaker; 
+		ofxTracker							*mpTracker; 
+		ofxATANCamera						*mpCamera;
+	
+		int									imgWidth;
+		int									imgHeight;
+		
+	public:
+		
+		void								initPTAM(int imgW, int imgH);
+		void								updatePTAM(unsigned char *pixels = 0);
+		
+		#ifdef USE_PTAM_VIDEOSRC
+		void								drawImg();		
+		#endif
+		void								drawTrail();				
+		
+		void								beginAR();
+		void								endAR();		
 
-    screenCoord*	getCurrentCamPos(int zDepth);
-    screenCoord*	getRndmTargetsPos();
-        
-    double			mapScrnX(double val);
-    double			mapScrnY(double val);*/
-    
-private:
-    //CVD::Image<CVD::Rgb<CVD::byte> >	mimFrameRGB;    // No usfull for the moment
-    CVD::Image<CVD::byte>   mimFrameBW;
+		screenCoord*						getCurrentCamPos(int zDepth);
+		screenCoord*						getRndmTargetsPos();
 	
-    Map                 *mpMap; 
-    MapMaker            *mpMapMaker; 
-    ofxTracker          *mpTracker; 
-    ofxATANCamera       *mpCamera;
-	
-    int					imgWidth;
-    int					imgHeight;
-    
-    bool				bMapBuildComplete;
+		void								startBuildMap();	
+		void								resetMap();
+
+		bool								bMapBuildComplete;	
+		
+		double								mapScrnX(double val);
+		double								mapScrnY(double val);
+
+
 };		
 		
 

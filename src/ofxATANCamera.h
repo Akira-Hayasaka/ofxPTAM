@@ -13,15 +13,19 @@
 #include "ofMain.h"
 
 class ofxATANCamera : public ATANCamera {
-public:
+
+	public:
 		
-    ofxATANCamera(string sName) : ATANCamera(sName) { };
+		ofxATANCamera(string sName) 
+			: ATANCamera(sName) 
+		{
+		}
 		
-    void manualParamUpdate(string cfgFile);
+		void manualParamUpdate(string cfgFile);
 		
-    bool paramTest();
+		bool paramTest();
 	
-private:
+	private:
 
 };
 

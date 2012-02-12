@@ -19,7 +19,7 @@ void ofxATANCamera::manualParamUpdate(string cfgFile) {
 	stream.close();
 
 	unsigned int loc = params.find( "=", 0 );
-    params.erase(0, loc+1);
+	params.erase(0, loc+1);
 	vector<char*> tmp;
 	char *strchar = std::strcpy(new char[params.size() + 1], params.c_str());
 	char *tp;
@@ -31,20 +31,13 @@ void ofxATANCamera::manualParamUpdate(string cfgFile) {
 	}
 	
 	Vector<5> vUpdate;
-    
-    // For some reason the first value apears as the second and so on
-    // I think it´s the [ ]
-    //
-    unsigned int offset = 0;
-    if (atof(tmp[0]) == 0)
-        offset = 1;
-    
 	for (int i = 0; i < 5; i++) {
-		vUpdate[i] = atof(tmp[i + offset]);
+		vUpdate[i] = atof(tmp[i+1]);
 	}
 	
 	(*mgvvCameraParams) = (*mgvvCameraParams) + vUpdate;
 	RefreshParams();
+
 }
 
 // TODO: do complete Test!

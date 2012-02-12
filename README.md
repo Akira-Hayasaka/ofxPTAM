@@ -1,6 +1,4 @@
 #ofxPTAM#
-This was addon started by @Akira_At_Asia and continue by @patriciogv
-
 You will find that you have to make and copy all the PTAM requierd libraries and soureces. Following you will find here an explanation on how to doit on Snow Leopard and Lion OSX.
 
 ##Compiling PTAM and needs libraries on MACOSX 10.6 and 10.7##

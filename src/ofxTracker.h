@@ -13,15 +13,17 @@
 
 
 class ofxTracker : public Tracker {
-public:
+
+	public:
 	
-    ofxTracker(CVD::ImageRef irVideoSize, const ATANCamera &c, Map &m, MapMaker &mm) : Tracker(irVideoSize, c, m, mm){ };
+		ofxTracker(CVD::ImageRef irVideoSize, const ATANCamera &c, Map &m, MapMaker &mm)
+			: Tracker(irVideoSize, c, m, mm)
+		{
+		}
 		
-    void reset(){ Reset(); };
-    void buildMapBegin();
-    
-    void drawTrail();
-	void drawGrid();
-	
-    vector<int> trail;
+		void reset();
+		void buildMapBegin();
+		void drawTrail();
+		
+		vector<int> trail;
 };

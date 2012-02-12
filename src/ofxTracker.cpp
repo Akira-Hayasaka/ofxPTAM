@@ -14,6 +14,10 @@
 
 using namespace CVD;
 
+void ofxTracker::reset() {
+	Reset();
+}
+
 void ofxTracker::buildMapBegin() {
 	mbUserPressedSpacebar = true;
 }
@@ -71,7 +75,5 @@ void ofxTracker::drawTrail() {
 	}
 }
 
-void ofxTracker::drawGrid() {
-    RenderGrid();
-}
+
 
